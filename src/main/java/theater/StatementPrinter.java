@@ -51,24 +51,24 @@ public class StatementPrinter {
         return result.toString();
     }
 
-    private static int getAmount(Performance p, Play play) {
+    private static int getAmount(Performance performance, Play play) {
         int amount;
         switch (play.getType()) {
             case "tragedy":
                 amount = Constants.TRAGEDY_BASE_AMOUNT;
-                if (p.getAudience() > Constants.TRAGEDY_AUDIENCE_THRESHOLD) {
+                if (performance.getAudience() > Constants.TRAGEDY_AUDIENCE_THRESHOLD) {
                     amount += Constants.TRAGEDY_OVER_BASE_CAPACITY_PER_PERSON
-                            * (p.getAudience() - Constants.TRAGEDY_AUDIENCE_THRESHOLD);
+                            * (performance.getAudience() - Constants.TRAGEDY_AUDIENCE_THRESHOLD);
                 }
                 break;
             case "comedy":
                 amount = Constants.COMEDY_BASE_AMOUNT;
-                if (p.getAudience() > Constants.COMEDY_AUDIENCE_THRESHOLD) {
+                if (performance.getAudience() > Constants.COMEDY_AUDIENCE_THRESHOLD) {
                     amount += Constants.COMEDY_OVER_BASE_CAPACITY_AMOUNT
                             + (Constants.COMEDY_OVER_BASE_CAPACITY_PER_PERSON
-                            * (p.getAudience() - Constants.COMEDY_AUDIENCE_THRESHOLD));
+                            * (performance.getAudience() - Constants.COMEDY_AUDIENCE_THRESHOLD));
                 }
-                amount += Constants.COMEDY_AMOUNT_PER_AUDIENCE * p.getAudience();
+                amount += Constants.COMEDY_AMOUNT_PER_AUDIENCE * performance.getAudience();
                 break;
             default:
                 throw new RuntimeException(String.format("unknown type: %s", play.getType()));
