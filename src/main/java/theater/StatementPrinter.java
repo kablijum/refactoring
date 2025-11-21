@@ -8,12 +8,20 @@ import java.util.Map;
  * This class generates a statement for a given invoice of performances.
  */
 public class StatementPrinter {
-    public Invoice invoice;
-    public Map<String, Play> plays;
+    private final Invoice invoice;
+    private final Map<String, Play> plays;
 
     public StatementPrinter(Invoice invoice, Map<String, Play> plays) {
         this.invoice = invoice;
         this.plays = plays;
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public Map<String, Play> getPlays() {
+        return plays;
     }
 
     /**
@@ -24,12 +32,13 @@ public class StatementPrinter {
     public String statement() {
         int totalAmount = 0;
         int volumeCredits = 0;
-        StringBuilder result = new StringBuilder("Statement for " + invoice.getCustomer() + System.lineSeparator());
+        final StringBuilder result = new StringBuilder("Statement for " + invoice.getCustomer()
+                + System.lineSeparator());
 
-        NumberFormat frmt = NumberFormat.getCurrencyInstance(Locale.US);
+        final NumberFormat format = NumberFormat.getCurrencyInstance(Locale.US);
 
         for (Performance p : invoice.getPerformances()) {
-            Play play = plays.get(p.getPlayID());
+            final Play play = plays.get(p.getPlayID());
 
             int thisAmount = 0;
             switch (play.getType()) {
@@ -58,10 +67,10 @@ public class StatementPrinter {
             if ("comedy".equals(play.getType())) volumeCredits += p.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
 
             // print line for this order
-            result.append(String.format("  %s: %s (%s seats)%n", play.getName(), frmt.format(thisAmount / 100), p.getAudience()));
+            result.append(String.format("  %s: %s (%s seats)%n", play.getName(), format.format(thisAmount / 100), p.getAudience()));
             totalAmount += thisAmount;
         }
-        result.append(String.format("Amount owed is %s%n", frmt.format(totalAmount / 100)));
+        result.append(String.format("Amount owed is %s%n", format.format(totalAmount / 100)));
         result.append(String.format("You earned %s credits%n", volumeCredits));
         return result.toString();
     }
