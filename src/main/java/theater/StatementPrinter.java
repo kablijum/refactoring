@@ -16,14 +16,6 @@ public class StatementPrinter {
         this.plays = plays;
     }
 
-    public Invoice getInvoice() {
-        return invoice;
-    }
-
-    public Map<String, Play> getPlays() {
-        return plays;
-    }
-
     /**
      * Returns a formatted statement of the invoice associated with this printer.
      * @return the formatted statement
@@ -40,7 +32,7 @@ public class StatementPrinter {
         for (Performance p : invoice.getPerformances()) {
             final Play play = plays.get(p.getPlayID());
 
-            int thisAmount = 0;
+            int thisAmount;
             switch (play.getType()) {
                 case "tragedy":
                     thisAmount = Constants.TRAGEDY_BASE_AMOUNT;
