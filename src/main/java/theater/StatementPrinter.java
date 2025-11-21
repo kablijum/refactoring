@@ -43,9 +43,10 @@ public class StatementPrinter {
             int thisAmount = 0;
             switch (play.getType()) {
                 case "tragedy":
-                    thisAmount = 40000;
+                    thisAmount = Constants.TRAGEDY_BASE_AMOUNT;
                     if (p.getAudience() > Constants.TRAGEDY_AUDIENCE_THRESHOLD) {
-                        thisAmount += 1000 * (p.getAudience() - 30);
+                        thisAmount += Constants.TRAGEDY_OVER_BASE_CAPACITY_PER_PERSON
+                                * (p.getAudience() - Constants.TRAGEDY_AUDIENCE_THRESHOLD);
                     }
                     break;
                 case "comedy":
@@ -64,13 +65,16 @@ public class StatementPrinter {
             // add volume credits
             volumeCredits += Math.max(p.getAudience() - Constants.BASE_VOLUME_CREDIT_THRESHOLD, 0);
             // add extra credit for every five comedy attendees
-            if ("comedy".equals(play.getType())) volumeCredits += p.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
+            if ("comedy".equals(play.getType())) {
+                volumeCredits += p.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
+            }
 
             // print line for this order
-            result.append(String.format("  %s: %s (%s seats)%n", play.getName(), format.format(thisAmount / 100), p.getAudience()));
+            result.append(String.format("  %s: %s (%s seats)%n", play.getName(),
+                    format.format(thisAmount / Constants.PERCENT_FACTOR), p.getAudience()));
             totalAmount += thisAmount;
         }
-        result.append(String.format("Amount owed is %s%n", format.format(totalAmount / 100)));
+        result.append(String.format("Amount owed is %s%n", format.format(totalAmount / Constants.PERCENT_FACTOR)));
         result.append(String.format("You earned %s credits%n", volumeCredits));
         return result.toString();
     }
